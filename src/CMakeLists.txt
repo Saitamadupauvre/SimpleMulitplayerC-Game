@@ -1,4 +1,5 @@
-#add_subdirectory(components)
+add_subdirectory(scenes)
+add_subdirectory(core)
 
 add_executable(multiplayer main.cpp)
 
@@ -9,4 +10,6 @@ set_target_properties(multiplayer PROPERTIES
 target_link_libraries(multiplayer PRIVATE
     SDL2::SDL2
     SDL2::SDL2main
+    scenes_lib
+    core_lib
 )
