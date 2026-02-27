@@ -1,5 +1,9 @@
 #include "./TestScene.hpp"
 
+TestScene::TestScene()
+{
+}
+
 void TestScene::onEvent(const SDL_Event& event)
 {
 }
