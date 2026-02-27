@@ -3,7 +3,7 @@
 #include <memory>
 #include "core/IScene.hpp"
 
-#include "../scenes/factory/SceneFactory.hpp"
+#include "../../game/scenes/factory/SceneFactory.hpp"
 
 class SceneManager
 {
