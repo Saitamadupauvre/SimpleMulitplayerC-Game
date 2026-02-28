@@ -4,6 +4,8 @@ add_library(engine_lib
     core/Application.cpp
 
     input/InputManager.cpp
+
+    ecs/EntityManager.cpp
 )
 
 target_include_directories(engine_lib PUBLIC

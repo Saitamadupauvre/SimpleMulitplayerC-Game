@@ -3,6 +3,8 @@
 #include "engine/IScene.hpp"
 #include <SDL2/SDL.h>
 
+#include "../../../engine/ecs/World.hpp"
+
 class TestScene : public IScene
 {
 public:
@@ -13,9 +15,5 @@ public:
     void onRender(SDL_Renderer& renderer, double alpha) override;
 
 private:
-    float _x = 100.0f;
-    float _y = 100.0f;
-    float _prevX = 100.0f;
-    float _prevY = 100.0f;
-    float _speed = 200.0f;
+    World _world;
 };
