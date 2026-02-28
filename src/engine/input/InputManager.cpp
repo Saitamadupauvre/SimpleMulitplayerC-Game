@@ -1,5 +1,19 @@
 #include "./InputManager.hpp"
 
+#include <iostream>
+
+InputManager::InputManager()
+{
+    static const std::unordered_map<InputAction, SDL_Scancode> defaultBindings = {
+        {InputAction::MoveUp, SDL_SCANCODE_W},
+        {InputAction::MoveDown, SDL_SCANCODE_S},
+        {InputAction::MoveLeft, SDL_SCANCODE_A},
+        {InputAction::MoveRight, SDL_SCANCODE_D},
+    };
+
+    _bindings = defaultBindings;
+}
+
 void InputManager::update()
 {
     _justPressed.clear();

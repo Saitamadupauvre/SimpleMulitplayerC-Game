@@ -1,6 +1,6 @@
 #pragma once
 
-enum class InputAction;
+#include "engine/InputAction.hpp"
 
 class IInput
 {

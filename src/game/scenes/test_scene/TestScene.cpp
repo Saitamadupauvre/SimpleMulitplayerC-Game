@@ -13,11 +13,10 @@ void TestScene::onUpdate(const IInput& inputManager, double dt)
     _prevX = _x;
     _prevY = _y;
 
-    const Uint8* state = SDL_GetKeyboardState(nullptr);
-    if (state[SDL_SCANCODE_UP])    _y -= _speed * dt;
-    if (state[SDL_SCANCODE_DOWN])  _y += _speed * dt;
-    if (state[SDL_SCANCODE_LEFT])  _x -= _speed * dt;
-    if (state[SDL_SCANCODE_RIGHT]) _x += _speed * dt;
+    if (inputManager.isActionPressed(InputAction::MoveUp))    _y -= _speed * dt;
+    if (inputManager.isActionPressed(InputAction::MoveDown))  _y += _speed * dt;
+    if (inputManager.isActionPressed(InputAction::MoveLeft))  _x -= _speed * dt;
+    if (inputManager.isActionPressed(InputAction::MoveRight)) _x += _speed * dt;
 
     if (_x < 0) _x = 0;
     if (_y < 0) _y = 0;

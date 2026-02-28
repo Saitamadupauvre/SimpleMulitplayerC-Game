@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/IInput.hpp"
-#include "./InputAction.hpp"
 
 #include <unordered_map>
 #include <unordered_set>
@@ -11,6 +10,8 @@
 class InputManager: public IInput
 {
 public:
+    InputManager();
+
     void update();
     bool isActionPressed(InputAction action) const;
     bool isActionJustPressed(InputAction action) const;
