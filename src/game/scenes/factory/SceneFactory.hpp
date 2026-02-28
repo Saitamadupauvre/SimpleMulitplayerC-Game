@@ -4,7 +4,7 @@
 #include <string>
 #include <memory>
 
-#include "core/IScene.hpp"
+#include "engine/IScene.hpp"
 
 enum class SceneType {
     Test,

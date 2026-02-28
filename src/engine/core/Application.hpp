@@ -3,6 +3,8 @@
 #include "./SceneManager.hpp"
 #include "./Clock.hpp"
 
+#include "../input/InputManager.hpp"
+
 #include <string>
 
 constexpr int SUCCESS_STATUS = 0;
@@ -29,6 +31,7 @@ private:
     bool _running = true;
     SceneManager _scenes;
     Clock _clock;
+    InputManager _input;
 
     double _accumulator = 0.0;
 

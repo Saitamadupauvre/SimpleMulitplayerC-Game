@@ -8,7 +8,7 @@ void TestScene::onEvent(const SDL_Event& event)
 {
 }
 
-void TestScene::onUpdate(double dt)
+void TestScene::onUpdate(const IInput& inputManager, double dt)
 {
     _prevX = _x;
     _prevY = _y;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "core/IScene.hpp"
+#include "engine/IScene.hpp"
 
 #include "../../game/scenes/factory/SceneFactory.hpp"
 

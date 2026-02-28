@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/IScene.hpp"
+#include "engine/IScene.hpp"
 #include <SDL2/SDL.h>
 
 class TestScene : public IScene
@@ -9,7 +9,7 @@ public:
     TestScene();
 
     void onEvent(const SDL_Event& event) override;
-    void onUpdate(double dt) override;
+    void onUpdate(const IInput& inputManager, double dt) override;
     void onRender(SDL_Renderer& renderer, double alpha) override;
 
 private:

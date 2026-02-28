@@ -34,6 +34,10 @@ void Application::run()
     if (_exitStatus != SUCCESS_STATUS) return;
 
     while (_running) {
+        _input.update();
+        if (_input.shouldQuit())
+            _running = false;
+
         _clock.tick();
         double frameTime = _clock.frameTime();
 
@@ -42,7 +46,7 @@ void Application::run()
         processEvents();
 
         while (_accumulator >= _clock.fixedDelta()) {
-            _scenes.current().onUpdate(_clock.fixedDelta());
+            _scenes.current().onUpdate(_input, _clock.fixedDelta());
             _accumulator -= _clock.fixedDelta();
         }
 
@@ -58,11 +62,13 @@ void Application::initSDL(const char* title, int width, int height)
         return;
     }
 
-    _window = SDL_CreateWindow(title,
-                               SDL_WINDOWPOS_CENTERED,
-                               SDL_WINDOWPOS_CENTERED,
-                               width, height,
-                               SDL_WINDOW_SHOWN);
+    _window = SDL_CreateWindow(
+        title,
+        SDL_WINDOWPOS_CENTERED,
+        SDL_WINDOWPOS_CENTERED,
+        width, height,
+        SDL_WINDOW_SHOWN
+    );
     if (!_window){
         _exitStatus = FAILURE_STATUS;
         return;
