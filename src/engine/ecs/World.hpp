@@ -1,8 +1,11 @@
 #pragma once
 
 #include "./EntityManager.hpp"
+#include "ComponentArray.hpp"
+#include "SystemManager.hpp"
 
 #include "engine/Component.hpp"
+#include "engine/Signature.hpp"
 
 #include <memory>
 #include <unordered_map>
@@ -10,29 +13,82 @@
 class World
 {
 public:
-    Entity createEntity() { return _entityManager.create(); }
-    void destroyEntity(Entity e) { _entityManager.destroy(e); }
+    Entity createEntity();
+    void destroyEntity(Entity e);
 
-    void addComponent(Entity e, std::shared_ptr<Component> comp)
-    {
-        _components[e].push_back(comp);
+    template<typename T>
+    requires std::is_base_of_v<Component, T>
+    void addComponent(Entity e, T component) {
+        const ComponentType type = getComponentTypeID<T>();
+        if (!has(e)) return;
+
+        getComponentArray<T>().insert(e, component);
+
+        if (type >= MAX_COMPONENTS)
+            throw std::logic_error("Too many component types, increase MAX BYTES amount");
+        _entitySignatures[e].set(type);
+        _systemManager.entitySignatureChanged(e, _entitySignatures[e]);
     }
 
     template<typename T>
     requires std::is_base_of_v<Component, T>
-    T* getComponent(Entity e)
-    {
-        auto it = _components.find(e);
-        if (it == _components.end()) return nullptr;
+    void removeComponent(Entity e) {
+        const ComponentType type = getComponentTypeID<T>();
+        if (!has(e)) return;
 
-        for (auto& comp : it->second) {
-            if (auto casted = dynamic_cast<T*>(comp.get()))
-                return casted;
-        }
-        return nullptr;
+        getComponentArray<T>().remove(e);
+
+        if (type >= MAX_COMPONENTS)
+            throw std::logic_error("Too many component types, increase MAX BYTES amount");
+        _entitySignatures[e].reset(type);
+        _systemManager.entitySignatureChanged(e, _entitySignatures[e]);
+    }
+
+    template<typename T>
+    requires std::is_base_of_v<Component, T>
+    T& getComponent(Entity e) {
+        return getComponentArray<T>().get(e);
+    }
+
+    template<typename T>
+    requires std::is_base_of_v<Component, T>
+    bool hasComponent(Entity e) const {
+        return getComponentArray<T>().has(e);
+    }
+
+    const Signature& getSignature(Entity e) const { return _entitySignatures.at(e); }
+
+    template<typename T>
+    std::shared_ptr<T> registerSystem() {
+        return _systemManager.registerSystem<T>();
+    }
+
+    template<typename T>
+    void setSystemSignature(Signature sig) {
+        _systemManager.setSignature<T>(sig);
+    }
+
+    void updateSystems(float dt) {
+        _systemManager.updateAll(*this, dt);
     }
 
 private:
     EntityManager _entityManager;
-    std::unordered_map<Entity, std::vector<std::shared_ptr<Component>>> _components;
+    SystemManager _systemManager;
+
+    template<typename T>
+    ComponentArray<T>& getComponentArray() {
+        ComponentType typeID = getComponentTypeID<T>();
+
+        if (typeID >= _componentArrays.size()) {
+            _componentArrays.resize(typeID + 1);
+        }
+        if (!_componentArrays[typeID]) {
+            _componentArrays[typeID] = std::make_unique<ComponentArray<T>>();
+        }
+        return *static_cast<ComponentArray<T>*>(_componentArrays[typeID].get());
+    }
+
+    std::vector<std::unique_ptr<IComponentArray>> _componentArrays;
+    std::unordered_map<Entity, Signature> _entitySignatures;
 };
