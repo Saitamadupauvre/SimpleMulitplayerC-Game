@@ -20,7 +20,6 @@ public:
     requires std::is_base_of_v<Component, T>
     void addComponent(Entity e, T component) {
         const ComponentType type = getComponentTypeID<T>();
-        if (!has(e)) return;
 
         getComponentArray<T>().insert(e, component);
 
@@ -34,7 +33,6 @@ public:
     requires std::is_base_of_v<Component, T>
     void removeComponent(Entity e) {
         const ComponentType type = getComponentTypeID<T>();
-        if (!has(e)) return;
 
         getComponentArray<T>().remove(e);
 

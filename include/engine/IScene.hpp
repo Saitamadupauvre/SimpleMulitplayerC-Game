@@ -3,6 +3,8 @@
 #include <SDL2/SDL.h>
 #include "./IInput.hpp"
 
+#include "engine/IRenderer.hpp"
+
 class IScene
 {
 public:
@@ -10,5 +12,5 @@ public:
 
     virtual void onEvent(const SDL_Event& event) = 0;
     virtual void onUpdate(const IInput& inputManager, double dt) = 0;
-    virtual void onRender(SDL_Renderer& renderer, double alpha) = 0;
+    virtual void onRender(IRenderer& renderer, double alpha) = 0;
 };

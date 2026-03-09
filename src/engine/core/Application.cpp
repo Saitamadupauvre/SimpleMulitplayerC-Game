@@ -1,20 +1,8 @@
 #include "./Application.hpp"
 
-Application::Application()
+Application::Application(): _renderer(800, 600)
 {
-    initSDL("Game", 800, 600);
-}
-
-Application::~Application()
-{
-    if (_renderer) {
-        SDL_DestroyRenderer(_renderer);
-        _renderer = nullptr;
-    }
-    if (_window) {
-        SDL_DestroyWindow(_window);
-        _window = nullptr;
-    }
+    _renderer.loadTexture("assets/default_sprite.png");
 }
 
 void Application::processEvents()
@@ -51,32 +39,8 @@ void Application::run()
         }
 
         double alpha = _accumulator / _clock.fixedDelta();
-        _scenes.current().onRender(*_renderer, alpha);
-    }
-}
-
-void Application::initSDL(const char* title, int width, int height)
-{
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
-        _exitStatus = FAILURE_STATUS;
-        return;
-    }
-
-    _window = SDL_CreateWindow(
-        title,
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-        width, height,
-        SDL_WINDOW_SHOWN
-    );
-    if (!_window){
-        _exitStatus = FAILURE_STATUS;
-        return;
-    }
-
-    _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
-    if (!_renderer) {
-        _exitStatus = FAILURE_STATUS;
-        return;
+        _renderer.beginFrame();
+        _scenes.current().onRender(_renderer, alpha);
+        _renderer.endFrame();
     }
 }

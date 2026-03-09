@@ -6,6 +6,10 @@ add_library(engine_lib
     input/InputManager.cpp
 
     ecs/EntityManager.cpp
+    ecs/SystemManager.cpp
+    ecs/World.cpp
+
+    render/Renderer.cpp
 )
 
 target_include_directories(engine_lib PUBLIC

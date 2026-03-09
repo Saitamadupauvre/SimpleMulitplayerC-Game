@@ -1,11 +1,10 @@
 #pragma once
 
 #include "engine/Component.hpp"
+#include "engine/IRenderer.hpp"
 
 struct Transform : Component {
-    float x = 0;
-    float y = 0;
+    Vec2 position;
     float rotation = 0;
-    float scaleX = 1;
-    float scaleY = 1;
+    Vec2 scale{1, 1};
 };

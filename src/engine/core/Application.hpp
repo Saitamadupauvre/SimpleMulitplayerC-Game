@@ -2,6 +2,7 @@
 
 #include "./SceneManager.hpp"
 #include "./Clock.hpp"
+#include "../render/Renderer.hpp"
 
 #include "../input/InputManager.hpp"
 
@@ -14,7 +15,6 @@ class Application
 {
 public:
     Application();
-    ~Application();
 
     void run();
 
@@ -25,18 +25,14 @@ private:
     void update();
     void render();
 
-    void initSDL(const char* title, int width, int height);
-
 private:
     bool _running = true;
     SceneManager _scenes;
     Clock _clock;
     InputManager _input;
+    Renderer _renderer;
 
     double _accumulator = 0.0;
-
-    SDL_Window* _window = nullptr;
-    SDL_Renderer* _renderer = nullptr;
 
     int _exitStatus = SUCCESS_STATUS;
 

@@ -12,17 +12,20 @@ class SystemManager
 {
 public:
     template<typename T, typename... Args>
+    requires std::is_base_of_v<System, T>
     std::shared_ptr<T> registerSystem(Args&&... args) {
         std::type_index type = typeid(T);
 
         auto system = std::make_shared<T>(std::forward<Args>(args)...);
         _systems[type] = system;
+
+        setSignature<T>(system->getSignature());
         return system;
     }
 
     template<typename T>
     requires std::is_base_of_v<System, T>
-    void SystemManager::setSignature(Signature signature) {
+    void setSignature(Signature signature) {
         std::type_index type = typeid(T);
         _signatures[type] = signature;
     }
@@ -31,6 +34,7 @@ public:
     void entitySignatureChanged(Entity e, const Signature& entitySignature);
 
     void updateAll(class World& world, float dt);
+    void renderAll(class World& world, IRenderer& renderer, double alpha);
 
 private:
     std::unordered_map<std::type_index, Signature> _signatures;
