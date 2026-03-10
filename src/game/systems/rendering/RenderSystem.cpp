@@ -4,6 +4,8 @@
 
 void RenderSystem::render(World& world, IRenderer& renderer, double alpha)
 {
+    (void)alpha;
+
     for (const Entity& e: entities) {
 
         auto& transform = world.getComponent<Transform>(e);
@@ -22,9 +24,12 @@ void RenderSystem::render(World& world, IRenderer& renderer, double alpha)
 
 Signature RenderSystem::getSignature() const
 {
-    Signature sig = Signature();
-    sig.set(getComponentTypeID<Transform>());
-    sig.set(getComponentTypeID<Sprite>());
+    static const Signature sig = [] {
+        Signature value;
+        value.set(getComponentTypeID<Transform>());
+        value.set(getComponentTypeID<Sprite>());
+        return value;
+    }();
 
     return sig;
 }

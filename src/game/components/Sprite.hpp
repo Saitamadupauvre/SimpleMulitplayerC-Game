@@ -1,9 +1,7 @@
 #pragma once
 
-#include "engine/Component.hpp"
-#include <cstdint>
-
-using TextureID = std::uint32_t;
+#include "engine/core/Component.hpp"
+#include "engine/core/Types.hpp"
 
 struct Sprite : Component {
     TextureID texture = 0;

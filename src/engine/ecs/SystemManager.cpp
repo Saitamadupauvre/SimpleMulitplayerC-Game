@@ -3,7 +3,7 @@
 void SystemManager::entityDestroyed(Entity e)
 {
     for (auto& [_, system] : _systems) {
-        system->entities.erase(e);
+        system->removeEntity(e);
     }
 }
 
@@ -13,9 +13,9 @@ void SystemManager::entitySignatureChanged(Entity e, const Signature& entitySign
         const Signature& systemSig = _signatures[type];
 
         if ((entitySignature & systemSig) == systemSig) {
-            system->entities.insert(e);
+            system->addEntity(e);
         } else {
-            system->entities.erase(e);
+            system->removeEntity(e);
         }
     }
 }

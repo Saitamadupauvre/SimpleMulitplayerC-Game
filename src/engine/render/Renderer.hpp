@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <string>
 
-#include "engine/IRenderer.hpp"
+#include "engine/render/IRenderer.hpp"
 
 class Renderer: public IRenderer
 {

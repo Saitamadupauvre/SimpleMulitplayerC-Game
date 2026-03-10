@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/InputAction.hpp"
+#include "engine/input/InputAction.hpp"
 
 class IInput
 {

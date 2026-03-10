@@ -2,11 +2,12 @@
 
 #include <unordered_map>
 #include <memory>
+#include <stdexcept>
 #include <typeindex>
 
 #include "System.hpp"
 
-#include "engine/Signature.hpp"
+#include "engine/core/Signature.hpp"
 
 class SystemManager
 {
@@ -15,6 +16,10 @@ public:
     requires std::is_base_of_v<System, T>
     std::shared_ptr<T> registerSystem(Args&&... args) {
         std::type_index type = typeid(T);
+
+        if (_systems.contains(type)) {
+            throw std::logic_error("System already registered");
+        }
 
         auto system = std::make_shared<T>(std::forward<Args>(args)...);
         _systems[type] = system;

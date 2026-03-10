@@ -1,9 +1,9 @@
 #include "EntityFactory.hpp"
 
-#include "../../components/Transform.hpp"
-#include "../../components/Sprite.hpp"
+#include "../components/Transform.hpp"
+#include "../components/Sprite.hpp"
 
-#include "engine/GameConfig.hpp"
+#include "game/config/GameConfig.hpp"
 
 Entity EntityFactory::createPlayer(TextureID texture, int x, int y, int size)
 {

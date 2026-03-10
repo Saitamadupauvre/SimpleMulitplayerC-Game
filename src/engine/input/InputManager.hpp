@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/IInput.hpp"
+#include "engine/input/IInput.hpp"
 
 #include <unordered_map>
 #include <unordered_set>
@@ -12,14 +12,13 @@ class InputManager: public IInput
 public:
     InputManager();
 
-    void update();
+    void beginFrame();
+    void processEvent(const SDL_Event& event);
     bool isActionPressed(InputAction action) const;
     bool isActionJustPressed(InputAction action) const;
     bool shouldQuit() const { return _quit; }
 
 private:
-    void processEvent(const SDL_Event& event);
-
     std::unordered_map<InputAction, SDL_Scancode> _bindings;
     std::unordered_set<SDL_Scancode> _pressed;
     std::unordered_set<SDL_Scancode> _justPressed;

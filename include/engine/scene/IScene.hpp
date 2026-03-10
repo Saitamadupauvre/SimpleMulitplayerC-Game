@@ -1,9 +1,9 @@
 #pragma once
 
 #include <SDL2/SDL.h>
-#include "./IInput.hpp"
+#include "engine/input/IInput.hpp"
 
-#include "engine/IRenderer.hpp"
+#include "engine/render/IRenderer.hpp"
 
 class IScene
 {

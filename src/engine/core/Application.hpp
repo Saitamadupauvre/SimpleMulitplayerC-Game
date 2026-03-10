@@ -1,12 +1,13 @@
 #pragma once
 
-#include "./SceneManager.hpp"
 #include "./Clock.hpp"
 #include "../render/Renderer.hpp"
 
 #include "../input/InputManager.hpp"
 
-#include <string>
+#include "engine/scene/IScene.hpp"
+
+#include <memory>
 
 constexpr int SUCCESS_STATUS = 0;
 constexpr int FAILURE_STATUS = 1;
@@ -22,12 +23,10 @@ public:
 
 private:
     void processEvents();
-    void update();
-    void render();
 
 private:
     bool _running = true;
-    SceneManager _scenes;
+    std::unique_ptr<IScene> _scene;
     Clock _clock;
     InputManager _input;
     Renderer _renderer;
@@ -35,14 +34,4 @@ private:
     double _accumulator = 0.0;
 
     int _exitStatus = SUCCESS_STATUS;
-
-private:
-    class ApplicationException : public std::exception
-    {
-    public:
-        ApplicationException(const std::string& msg): _msg(msg) {}
-        const char* what() const noexcept override { return _msg.c_str(); }
-    private:
-        std::string _msg;
-    };
 };

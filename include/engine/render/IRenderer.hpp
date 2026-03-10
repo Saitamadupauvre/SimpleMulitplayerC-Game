@@ -1,13 +1,7 @@
 #pragma once
 
 #include <string>
-
-using TextureID = unsigned int;
-
-struct Vec2 {
-    float x = 0;
-    float y = 0;
-};
+#include "engine/core/Types.hpp"
 
 class IRenderer {
 public:

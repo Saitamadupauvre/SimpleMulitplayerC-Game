@@ -1,13 +1,19 @@
 #include "Renderer.hpp"
 #include <stdexcept>
 #include <SDL2/SDL_image.h>
-
-#include <iostream>
+#include <string>
 
 Renderer::Renderer(int width, int height, const char *title)
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
-        throw std::runtime_error("SDL init failed");
+        throw std::runtime_error(std::string("SDL init failed: ") + SDL_GetError());
+
+    const int imageFlags = IMG_INIT_PNG;
+    if ((IMG_Init(imageFlags) & imageFlags) != imageFlags) {
+        const std::string error = std::string("SDL_image init failed: ") + IMG_GetError();
+        SDL_Quit();
+        throw std::runtime_error(error);
+    }
 
     _window = SDL_CreateWindow(
         title,
@@ -19,16 +25,28 @@ Renderer::Renderer(int width, int height, const char *title)
     );
 
     if (!_window)
-        throw std::runtime_error("Window creation failed");
+    {
+        const std::string error = std::string("Window creation failed: ") + SDL_GetError();
+        IMG_Quit();
+        SDL_Quit();
+        throw std::runtime_error(error);
+    }
 
     _renderer = SDL_CreateRenderer(
         _window,
         -1,
-        SDL_RENDERER_ACCELERATED
+        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
     );
 
     if (!_renderer)
-        throw std::runtime_error("Renderer creation failed");
+    {
+        const std::string error = std::string("Renderer creation failed: ") + SDL_GetError();
+        SDL_DestroyWindow(_window);
+        _window = nullptr;
+        IMG_Quit();
+        SDL_Quit();
+        throw std::runtime_error(error);
+    }
 }
 
 Renderer::~Renderer()
@@ -36,8 +54,12 @@ Renderer::~Renderer()
     for (auto& [_, texture] : _textures)
         SDL_DestroyTexture(texture);
 
-    SDL_DestroyRenderer(_renderer);
-    SDL_DestroyWindow(_window);
+    if (_renderer)
+        SDL_DestroyRenderer(_renderer);
+    if (_window)
+        SDL_DestroyWindow(_window);
+
+    IMG_Quit();
     SDL_Quit();
 }
 
@@ -56,7 +78,7 @@ TextureID Renderer::loadTexture(const std::string& path)
 {
     SDL_Surface* surface = IMG_Load(path.c_str());
     if (!surface)
-        throw std::runtime_error("Failed to load texture");
+        throw std::runtime_error(std::string("Failed to load texture: ") + IMG_GetError());
 
     SDL_Texture* texture =
         SDL_CreateTextureFromSurface(_renderer, surface);
@@ -64,7 +86,7 @@ TextureID Renderer::loadTexture(const std::string& path)
     SDL_FreeSurface(surface);
 
     if (!texture)
-        throw std::runtime_error("Texture creation failed");
+        throw std::runtime_error(std::string("Texture creation failed: ") + SDL_GetError());
 
     TextureID id = _nextTextureID++;
     _textures[id] = texture;

@@ -1,10 +1,10 @@
 #pragma once
 #include <vector>
 #include <unordered_map>
-#include <cassert>
+#include <utility>
 
-#include "engine/Component.hpp"
-#include "exception/ComponentException.hpp"
+#include "engine/core/Component.hpp"
+#include "engine/exceptions/ComponentException.hpp"
 
 #include "Entity.hpp"
 
@@ -25,7 +25,7 @@ struct IComponentArray {
     virtual ~IComponentArray() = default;
 
     virtual void remove(Entity entity) = 0;
-    virtual bool has(Entity entity) = 0;
+    virtual bool has(Entity entity) const = 0;
 };
 
 template<typename T>
@@ -34,14 +34,14 @@ class ComponentArray: public IComponentArray
 {
 public:
     void insert(Entity entity, T component) {
-        if (!has(entity)) {
-            return;
+        if (has(entity)) {
+            throw ComponentException("Entity already has this component type");
         }
 
         size_t newIndex = components.size();
         entityToIndex[entity] = newIndex;
         indexToEntity[newIndex] = entity;
-        components.push_back(component);
+        components.push_back(std::move(component));
     }
 
     void remove(Entity entity) override {
@@ -69,7 +69,14 @@ public:
         return components[entityToIndex[entity]];
     }
 
-    bool has(Entity entity) override {
+    const T& get(Entity entity) const {
+        if (!has(entity)) {
+            throw ComponentException("Component doesn't exist when trying to get");
+        }
+        return components[entityToIndex.at(entity)];
+    }
+
+    bool has(Entity entity) const override {
         return entityToIndex.find(entity) != entityToIndex.end();
     }
 

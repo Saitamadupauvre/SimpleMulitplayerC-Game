@@ -1,7 +1,5 @@
 #include "./InputManager.hpp"
 
-#include <iostream>
-
 InputManager::InputManager()
 {
     static const std::unordered_map<InputAction, SDL_Scancode> defaultBindings = {
@@ -14,14 +12,9 @@ InputManager::InputManager()
     _bindings = defaultBindings;
 }
 
-void InputManager::update()
+void InputManager::beginFrame()
 {
     _justPressed.clear();
-
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        processEvent(event);
-    }
 }
 
 void InputManager::processEvent(const SDL_Event& event)

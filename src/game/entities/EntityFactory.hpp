@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../../engine/ecs/World.hpp"
+#include "../../engine/ecs/World.hpp"
 
-#include "engine/Types.hpp"
+#include "engine/core/Types.hpp"
 
 class EntityFactory
 {

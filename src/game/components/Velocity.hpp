@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/Component.hpp"
+#include "engine/core/Component.hpp"
 
 struct Velocity : Component {
     float vx;

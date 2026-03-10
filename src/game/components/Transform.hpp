@@ -1,7 +1,7 @@
 #pragma once
 
-#include "engine/Component.hpp"
-#include "engine/IRenderer.hpp"
+#include "engine/core/Component.hpp"
+#include "engine/core/Types.hpp"
 
 struct Transform : Component {
     Vec2 position;

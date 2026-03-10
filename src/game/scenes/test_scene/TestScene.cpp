@@ -1,24 +1,33 @@
 #include "./TestScene.hpp"
 
-#include "../../systems/render/RenderSystem.hpp"
+#include "../../systems/rendering/RenderSystem.hpp"
 
-TestScene::TestScene(): _entityFactory(_world)
+#include "game/config/GameConfig.hpp"
+
+TestScene::TestScene(TextureID playerTexture)
+    : _entityFactory(_world), _playerTexture(playerTexture)
 {
-    _systemManager.registerSystem<RenderSystem>();
+    _world.registerSystem<RenderSystem>();
+    spawnDuelPlayers();
+}
 
-    _entityFactory.createPlayer(800/2, 600/2);
+void TestScene::spawnDuelPlayers()
+{
+    _entityFactory.createPlayer(_playerTexture, GameConfig::Duel::RightSpawnX, GameConfig::Duel::SpawnY);
 }
 
 void TestScene::onEvent(const SDL_Event& event)
 {
+    (void)event;
 }
 
 void TestScene::onUpdate(const IInput& inputManager, double dt)
 {
-    
+    (void)inputManager;
+    _world.updateSystems(static_cast<float>(dt));
 }
 
 void TestScene::onRender(IRenderer& renderer, double alpha)
 {
-    _systemManager.renderAll(_world, renderer, alpha);
+    _world.renderSystems(renderer, alpha);
 }

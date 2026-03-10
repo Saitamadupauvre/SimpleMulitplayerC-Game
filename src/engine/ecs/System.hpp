@@ -1,11 +1,12 @@
 #pragma once
 
-#include <set>
+#include <algorithm>
+#include <vector>
 
 #include "Entity.hpp"
 
-#include "engine/Signature.hpp"
-#include "engine/IRenderer.hpp"
+#include "engine/core/Signature.hpp"
+#include "engine/render/IRenderer.hpp"
 
 class System
 {
@@ -17,5 +18,19 @@ public:
 
     virtual Signature getSignature() const = 0;
 
-    std::set<Entity> entities;
+    bool hasEntity(Entity e) const {
+        return std::find(entities.begin(), entities.end(), e) != entities.end();
+    }
+
+    void addEntity(Entity e) {
+        if (!hasEntity(e)) {
+            entities.push_back(e);
+        }
+    }
+
+    void removeEntity(Entity e) {
+        entities.erase(std::remove(entities.begin(), entities.end(), e), entities.end());
+    }
+
+    std::vector<Entity> entities;
 };

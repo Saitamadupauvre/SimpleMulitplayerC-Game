@@ -1,10 +1,9 @@
 add_library(game_lib
-    scenes/factory/SceneFactory.cpp
-    scenes/test_scene/TestScene.cpp
+    scenes/match/TestScene.cpp
 
-    entities/factory/EntityFactory.cpp
+    entities/EntityFactory.cpp
 
-    systems/render/RenderSystem.cpp
+    systems/rendering/RenderSystem.cpp
 )
 
 target_include_directories(game_lib PUBLIC
