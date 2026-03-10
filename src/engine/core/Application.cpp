@@ -1,6 +1,6 @@
 #include "./Application.hpp"
 
-#include "../../game/scenes/match/TestScene.hpp"
+#include "../../game/scenes/test_scene/TestScene.hpp"
 
 #include "game/config/GameConfig.hpp"
 
@@ -16,8 +16,6 @@ Application::Application(): _renderer(GameConfig::Window::Width, GameConfig::Win
 
 void Application::processEvents()
 {
-    _input.beginFrame();
-
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
@@ -44,6 +42,7 @@ void Application::run()
         int updateSteps = 0;
         while (_accumulator >= _clock.fixedDelta() && updateSteps < MAX_FIXED_UPDATES_PER_FRAME) {
             _scene->onUpdate(_input, _clock.fixedDelta());
+            _input.clearTransientInputs();
             _accumulator -= _clock.fixedDelta();
             ++updateSteps;
         }

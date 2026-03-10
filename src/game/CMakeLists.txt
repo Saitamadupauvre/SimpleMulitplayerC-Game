@@ -1,8 +1,9 @@
 add_library(game_lib
-    scenes/match/TestScene.cpp
+    scenes/test_scene/TestScene.cpp
 
     entities/EntityFactory.cpp
 
+    systems/gameplay/PhysicsSystem.cpp
     systems/rendering/RenderSystem.cpp
 )
 

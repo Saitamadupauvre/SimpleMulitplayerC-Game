@@ -2,17 +2,17 @@
 
 InputManager::InputManager()
 {
-    static const std::unordered_map<InputAction, SDL_Scancode> defaultBindings = {
-        {InputAction::MoveUp, SDL_SCANCODE_W},
-        {InputAction::MoveDown, SDL_SCANCODE_S},
-        {InputAction::MoveLeft, SDL_SCANCODE_A},
-        {InputAction::MoveRight, SDL_SCANCODE_D},
+    static const std::unordered_map<InputAction, std::vector<SDL_Scancode>> defaultBindings = {
+        {InputAction::MoveUp, {SDL_SCANCODE_W, SDL_SCANCODE_SPACE, SDL_SCANCODE_UP}},
+        {InputAction::MoveDown, {SDL_SCANCODE_S, SDL_SCANCODE_DOWN}},
+        {InputAction::MoveLeft, {SDL_SCANCODE_A, SDL_SCANCODE_LEFT}},
+        {InputAction::MoveRight, {SDL_SCANCODE_D, SDL_SCANCODE_RIGHT}},
     };
 
     _bindings = defaultBindings;
 }
 
-void InputManager::beginFrame()
+void InputManager::clearTransientInputs()
 {
     _justPressed.clear();
 }
@@ -39,7 +39,12 @@ bool InputManager::isActionPressed(InputAction action) const
     if (it == _bindings.end())
         return false;
 
-    return _pressed.contains(it->second);
+    for (const SDL_Scancode scancode : it->second) {
+        if (_pressed.contains(scancode)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool InputManager::isActionJustPressed(InputAction action) const
@@ -48,5 +53,10 @@ bool InputManager::isActionJustPressed(InputAction action) const
     if (it == _bindings.end())
         return false;
 
-    return _justPressed.contains(it->second);
+    for (const SDL_Scancode scancode : it->second) {
+        if (_justPressed.contains(scancode)) {
+            return true;
+        }
+    }
+    return false;
 }

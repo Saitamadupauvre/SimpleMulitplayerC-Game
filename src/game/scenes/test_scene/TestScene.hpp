@@ -3,6 +3,8 @@
 #include "engine/scene/IScene.hpp"
 #include <SDL2/SDL.h>
 
+#include <vector>
+
 #include "../../../engine/ecs/World.hpp"
 #include "../../entities/EntityFactory.hpp"
 
@@ -16,10 +18,12 @@ public:
     void onRender(IRenderer& renderer, double alpha) override;
 
 private:
+    void applyPlayerInput(const IInput& inputManager);
     void spawnDuelPlayers();
 
 private:
     World _world;
     EntityFactory _entityFactory;
     TextureID _playerTexture = 0;
+    std::vector<Entity> _playerEntities;
 };

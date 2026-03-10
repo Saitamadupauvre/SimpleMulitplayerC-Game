@@ -1,7 +1,9 @@
 #include "EntityFactory.hpp"
 
+#include "../components/PlayerController.hpp"
 #include "../components/Transform.hpp"
 #include "../components/Sprite.hpp"
+#include "../components/Velocity.hpp"
 
 #include "game/config/GameConfig.hpp"
 
@@ -17,7 +19,12 @@ Entity EntityFactory::createPlayer(TextureID texture, int x, int y, int size)
     sprite.width = size > 0 ? size : GameConfig::Player::SpriteSize;
     sprite.height = size > 0 ? size : GameConfig::Player::SpriteSize;
 
+    PlayerController controller;
+    controller.groundY = transform.position.y;
+
     _world.addComponent(player, transform);
     _world.addComponent(player, sprite);
+    _world.addComponent(player, Velocity{});
+    _world.addComponent(player, controller);
     return player;
 }
