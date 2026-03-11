@@ -4,6 +4,7 @@
 #include <memory>
 #include <stdexcept>
 #include <typeindex>
+#include <vector>
 
 #include "System.hpp"
 
@@ -23,6 +24,7 @@ public:
 
         auto system = std::make_shared<T>(std::forward<Args>(args)...);
         _systems[type] = system;
+        _systemOrder.push_back(type);
 
         setSignature<T>(system->getSignature());
         return system;
@@ -42,6 +44,7 @@ public:
     void renderAll(class World& world, IRenderer& renderer, double alpha);
 
 private:
+    std::vector<std::type_index> _systemOrder;
     std::unordered_map<std::type_index, Signature> _signatures;
     std::unordered_map<std::type_index, std::shared_ptr<System>> _systems;
 };

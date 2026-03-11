@@ -3,6 +3,7 @@ add_library(game_lib
 
     entities/EntityFactory.cpp
 
+    systems/gameplay/CollisionSystem.cpp
     systems/gameplay/PhysicsSystem.cpp
     systems/rendering/RenderSystem.cpp
 )

@@ -15,14 +15,6 @@ void PhysicsSystem::update(World& world, float dt)
 
         transform.position.x += velocity.vx * dt;
         transform.position.y += velocity.vy * dt;
-
-        if (transform.position.y >= controller.groundY) {
-            transform.position.y = controller.groundY;
-            velocity.vy = 0.0f;
-            controller.onGround = true;
-        } else {
-            controller.onGround = false;
-        }
     }
 }
 

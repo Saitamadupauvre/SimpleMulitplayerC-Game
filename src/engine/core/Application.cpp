@@ -4,9 +4,7 @@
 
 #include "game/config/GameConfig.hpp"
 
-namespace {
 constexpr int MAX_FIXED_UPDATES_PER_FRAME = 5;
-}
 
 Application::Application(): _renderer(GameConfig::Window::Width, GameConfig::Window::Height)
 {
@@ -48,7 +46,6 @@ void Application::run()
         }
 
         if (updateSteps == MAX_FIXED_UPDATES_PER_FRAME && _accumulator >= _clock.fixedDelta()) {
-            // Drop excessive backlog to keep the simulation responsive under temporary spikes.
             _accumulator = _clock.fixedDelta();
         }
 

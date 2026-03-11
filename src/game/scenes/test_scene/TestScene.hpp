@@ -19,6 +19,7 @@ public:
 
 private:
     void applyPlayerInput(const IInput& inputManager);
+    void spawnPlatforms();
     void spawnDuelPlayers();
 
 private:
